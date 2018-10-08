@@ -1,7 +1,7 @@
 package com.tosim.fileshare.web.config.shiro;
 
 import com.tosim.fileshare.web.config.shiro.filter.KickoutSessionControlFilter;
-import com.tosim.fileshare.web.config.shiro.realm.AdminRealm;
+import com.tosim.fileshare.web.config.shiro.realm.UserRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -114,17 +114,17 @@ public class ShiroConfig {
         securityManager.setCacheManager(shiroCacheManager());
         // 自定义session管理 使用redis
         securityManager.setSessionManager(sessionManager());
-        securityManager.setRealm(adminRealm());
+        securityManager.setRealm(userRealm());
         return securityManager;
     }
 
     @Bean
-    public AdminRealm adminRealm(){
-        AdminRealm userRealm = new AdminRealm();
+    public UserRealm userRealm(){
+        UserRealm userRealm = new UserRealm();
         userRealm.setCacheManager(shiroCacheManager());
         //userRealm.setCredentialsMatcher(hashedCredentialsMatcher());//为此realm设置凭证匹配器
         //设置此realm只接受TelephoneAndPasswd类型的认证凭证
-        userRealm.setName("adminRealm");
+        userRealm.setName("userRealm");
         return userRealm;
     }
 

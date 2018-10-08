@@ -4,7 +4,6 @@ package com.tosim.fileshare.common.config.web;
 import com.tosim.fileshare.common.config.exception.BusinessException;
 import com.tosim.fileshare.common.config.exception.ParamException;
 import com.tosim.fileshare.common.constants.ErrorCodes;
-import com.tosim.fileshare.common.dto.RespJson;
 
 public class ResultUtil {
 

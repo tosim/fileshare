@@ -1,0 +1,12 @@
+spring:
+  profiles:
+#    active: server
+    include: common
+
+shiro:
+  session:
+    expiredTime: 1800 #session失效时间1800秒
+
+server:
+  port: 8090
+

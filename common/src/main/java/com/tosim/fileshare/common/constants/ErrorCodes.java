@@ -7,7 +7,13 @@ public enum ErrorCodes {
     SYSTEM_ERROR("A1002","系统错误"),
 
     UNAUTHENTICATED("A2001","未登录认证"),
-    UNAUTHORIZED("A2002","用户未授权");
+    UNAUTHORIZED("A2002","用户未授权"),
+
+    LOGIN_FAILED("A3001","登录失败"),
+    REGISTER_FAILED("A3002","注册失败"),
+
+    DOWNLOAD_FILE_FAILED("A4001","下载文件失败");
+
 
     private final String code;
     private final String msg;

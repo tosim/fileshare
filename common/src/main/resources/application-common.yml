@@ -4,7 +4,7 @@ spring:
   #mysql配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/tonghe?useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/fileshare?useSSL=false
     username: root
     password: "056210"
     #外网数据库ip
@@ -39,10 +39,10 @@ spring:
   #redis配置
   redis:
     database: 0
-#    host: 127.0.0.1
-#    password:
-    host: 47.96.239.50
-    password: THlc123456
+    host: 127.0.0.1
+    password:
+#    host: 47.96.239.50
+#    password: THlc123456
     port: 6379
     timeout: 0
     pool:
