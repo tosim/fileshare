@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/fileshare?useSSL=false
     username: root
-    password: "056210"
+    password: "123456"
     #外网数据库ip
     ###################以下为druid增加的配置###########################
     type: com.alibaba.druid.pool.DruidDataSource
@@ -62,11 +62,8 @@ pagehelper:
   reasonable: false
   supportMethodsArguments: true
   params: count\=countSql
-  page-size-zero: true
 
 mybatis:
   type-aliases-package: com.tosim.fileshare.common.domain
   configuration:
     mapUnderscoreToCamelCase: true
-
-

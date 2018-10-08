@@ -1,5 +1,6 @@
 package com.tosim.fileshare.web.service;
 
+import com.github.pagehelper.PageInfo;
 import com.tosim.fileshare.common.domain.FsUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,7 @@ public interface FileService {
 
     ResponseEntity<byte[]> download(String[] fileId, FsUser fsUser) throws IOException;
 
-    List searchFiles(String keyword);
+    Map searchFiles(String keyword, Integer page, Integer pageSize);
 
     Map<String, Object> getFileListByUserId(Integer page, Integer pageSize, String userId);
 

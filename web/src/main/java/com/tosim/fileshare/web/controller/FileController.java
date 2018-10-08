@@ -5,6 +5,7 @@ import com.tosim.fileshare.common.config.web.ResultUtil;
 import com.tosim.fileshare.common.constants.Constants;
 import com.tosim.fileshare.common.domain.FsUser;
 import com.tosim.fileshare.web.service.FileService;
+import lombok.extern.slf4j.Slf4j;
 import com.tosim.fileshare.web.service.SessionService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresUser;
@@ -18,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
 
+@Slf4j
+@RestController
 @Controller
 @RequestMapping("/files")
 public class FileController {
@@ -39,6 +42,14 @@ public class FileController {
 
     @RequiresUser
     @ResponseBody
+    @GetMapping(value = {"/search"})
+    public RespJson search(String keyword,
+                           @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                           @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        log.info("fileName: " + keyword + ", page: " + page);
+        return ResultUtil.success(fileService.searchFiles(keyword, page, pageSize));
+    }
+
     @GetMapping("/user")
     public RespJson getFileListByUserId(Integer page, Integer pageSize) {
         String userId = (String)SecurityUtils.getSubject().getSession().getAttribute(Constants.USER_ID);
@@ -56,7 +67,7 @@ public class FileController {
 
     @RequiresUser
     @GetMapping("/download")
-    public ResponseEntity<byte[]> download(String[] fileIds) throws IOException{
+    public ResponseEntity<byte[]> download(String[] fileIds) throws IOException {
         FsUser loginUser = sessionService.getSessionedUserBySession(SecurityUtils.getSubject().getSession());
         sessionService.removeSessionedUserBySession(SecurityUtils.getSubject().getSession());
         return fileService.download(fileIds, loginUser);
