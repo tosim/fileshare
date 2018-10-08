@@ -3,7 +3,6 @@ package com.tosim.fileshare.common.util;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.Arrays;
 
 public class FastUtilTest {
 
