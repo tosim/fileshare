@@ -27,6 +27,7 @@ public class FileController {
     @Autowired
     SessionService sessionService;
 
+    @RequiresUser
     @ResponseBody
     @PostMapping("")
     public RespJson upload(MultipartFile file, String fileName, String introduce, Integer point) {
@@ -36,6 +37,7 @@ public class FileController {
         return ResultUtil.success();
     }
 
+    @RequiresUser
     @ResponseBody
     @GetMapping("/user")
     public RespJson getFileListByUserId(Integer page, Integer pageSize) {

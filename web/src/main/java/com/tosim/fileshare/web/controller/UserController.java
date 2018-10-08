@@ -10,6 +10,7 @@ import com.tosim.fileshare.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,7 @@ public class UserController {
         }
     }
 
+    @RequiresUser
     @PostMapping("/update")
     public RespJson updateUser(String gender, String introduce) {
         FsUser loginUser = (FsUser) SecurityUtils.getSubject().getSession().getAttribute(Constants.USER_SESSION);
