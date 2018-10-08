@@ -74,7 +74,7 @@ public class FileServiceImpl implements FileService {
             throw new BusinessException(ErrorCodes.DOWNLOAD_FILE_FAILED);
         //压缩后的文件
 		String resourcesName = "packaged-"+fsUser.getUserId()+".zip";
-		String zipTmpFilePath = "/tmp/" + resourcesName;
+		String zipTmpFilePath = "D:/" + resourcesName;
 		ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipTmpFilePath));
 		for (int i = 0;i < n;i++) {
             zipOut.putNextEntry(new ZipEntry(fsFileList[i].getFileName()));
