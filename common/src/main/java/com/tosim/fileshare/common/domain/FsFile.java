@@ -24,6 +24,8 @@ public class FsFile {
 
     private Integer size;
 
+    private String introduce;
+
     private Integer point;
 
     @Column(name = "reduce_flag")
@@ -154,6 +156,20 @@ public class FsFile {
      */
     public void setSize(Integer size) {
         this.size = size;
+    }
+
+    /**
+     * @return
+     */
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    /**
+     * @param introduce
+     */
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
     }
 
     /**

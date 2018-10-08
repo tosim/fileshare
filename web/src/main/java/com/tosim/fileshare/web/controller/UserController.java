@@ -5,6 +5,7 @@ import com.tosim.fileshare.common.config.web.ResultUtil;
 import com.tosim.fileshare.common.constants.Constants;
 import com.tosim.fileshare.common.constants.ErrorCodes;
 import com.tosim.fileshare.common.domain.FsUser;
+import com.tosim.fileshare.web.service.SessionService;
 import com.tosim.fileshare.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -22,6 +23,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    SessionService sessionService;
 
     @PostMapping("")
     public RespJson register(String accountName, String password, String confirmPassword, String email){
@@ -38,5 +41,11 @@ public class UserController {
         }
     }
 
-
+    @PostMapping("/update")
+    public RespJson updateUser(String gender, String introduce) {
+        FsUser loginUser = (FsUser) SecurityUtils.getSubject().getSession().getAttribute(Constants.USER_SESSION);
+        userService.updateUser(gender, introduce, loginUser.getId());
+        sessionService.removeSessionedUserBySession(SecurityUtils.getSubject().getSession());
+        return ResultUtil.success();
+    }
 }

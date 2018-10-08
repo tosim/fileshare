@@ -1,11 +1,13 @@
 package com.tosim.fileshare.web.service.impl;
 
 import com.tosim.fileshare.common.config.exception.BusinessException;
+import com.tosim.fileshare.common.constants.Constants;
 import com.tosim.fileshare.common.constants.ErrorCodes;
 import com.tosim.fileshare.common.domain.FsUser;
 import com.tosim.fileshare.common.mapper.FsUserMapper;
 import com.tosim.fileshare.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,4 +36,15 @@ public class UserServiceImpl implements UserService {
         registUser.setLoginIp(0);
         fsUserMapper.insertSelective(registUser);
     }
+
+    @Override
+    public void updateUser(String gender, String introduce, Integer id) {
+        FsUser fsUser = new FsUser();
+        fsUser.setGender(gender);
+        fsUser.setIntroduce(introduce);
+        fsUser.setId(id);
+        fsUserMapper.updateByPrimaryKeySelective(fsUser);
+        SecurityUtils.getSubject().getSession().setAttribute(Constants.USER_SESSION, fsUserMapper.selectByPrimaryKey(id));
+    }
+
 }
