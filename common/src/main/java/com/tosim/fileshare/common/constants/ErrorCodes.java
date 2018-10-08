@@ -12,7 +12,8 @@ public enum ErrorCodes {
     LOGIN_FAILED("A3001","登录失败"),
     REGISTER_FAILED("A3002","注册失败"),
 
-    DOWNLOAD_FILE_FAILED("A4001","下载文件失败");
+    DOWNLOAD_FILE_FAILED("A4001","下载文件失败"),
+    UPLOAD_FILE_FAILED("A4002","上传文件失败");
 
 
     private final String code;

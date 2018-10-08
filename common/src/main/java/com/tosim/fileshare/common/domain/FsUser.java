@@ -15,6 +15,8 @@ public class FsUser implements Serializable {
     @Column(name = "user_name")
     private String userName;
 
+    private String gender;
+
     private String password;
 
     private Integer points;
@@ -76,6 +78,20 @@ public class FsUser implements Serializable {
      */
     public void setUserName(String userName) {
         this.userName = userName == null ? null : userName.trim();
+    }
+
+    /**
+     * @return
+     */
+    public String getGender() {
+        return gender;
+    }
+
+    /**
+     * @param gender
+     */
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     /**

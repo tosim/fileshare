@@ -57,14 +57,13 @@ druid:
   username: root
   password: "056210"
 
-mybatis:
-  type-aliases-package: com.tosim.fileshare.common.domain
-  configuration:
-    mapUnderscoreToCamelCase: true
-
 pagehelper:
   helperDialect: mysql
   reasonable: false
   supportMethodsArguments: true
   params: count\=countSql
-#  page-size-zero: true
+
+mybatis:
+  type-aliases-package: com.tosim.fileshare.common.domain
+  configuration:
+    mapUnderscoreToCamelCase: true

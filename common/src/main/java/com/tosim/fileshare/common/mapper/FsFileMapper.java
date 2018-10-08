@@ -14,4 +14,7 @@ public interface FsFileMapper extends MyMapper<FsFile> {
     @Select("SELECT * from fs_file where file_name like CONCAT('%', #{fileName}, '%')")
     List<FsFile> selectByFileName(String fileName);
 
+    @Select("select * from fs_file where owner=#{userId}")
+    List<FsFile> selectByUserId(String userId);
+
 }

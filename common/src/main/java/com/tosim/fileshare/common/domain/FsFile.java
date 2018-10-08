@@ -24,6 +24,8 @@ public class FsFile {
 
     private Integer size;
 
+    private String introduce;
+
     private Integer point;
 
     @Column(name = "reduce_flag")
@@ -31,6 +33,9 @@ public class FsFile {
 
     @Column(name = "storage_uri")
     private String storageUri;
+
+    @Column(name = "preview_uri")
+    private String previewUri;
 
     @Column(name = "private_flag")
     private Boolean privateFlag;
@@ -157,6 +162,20 @@ public class FsFile {
     }
 
     /**
+     * @return
+     */
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    /**
+     * @param introduce
+     */
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+    /**
      * @return point
      */
     public Integer getPoint() {
@@ -182,6 +201,20 @@ public class FsFile {
      */
     public void setReduceFlag(String reduceFlag) {
         this.reduceFlag = reduceFlag == null ? null : reduceFlag.trim();
+    }
+
+    /**
+     * @return
+     */
+    public String getPreviewUri() {
+        return previewUri;
+    }
+
+    /**
+     * @param previewUri
+     */
+    public void setPreviewUri(String previewUri) {
+        this.previewUri = previewUri;
     }
 
     /**
