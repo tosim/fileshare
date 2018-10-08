@@ -22,7 +22,7 @@ public class Pdf2Jpg {
 
 	public static final String SUFF_IMAGE = "." + FILETYPE_PNG;
 
-	public int tranfer(String sourceFile, String destFile)throws PDFException, PDFSecurityException, IOException {
+	public static int tranfer(String sourceFile, String destFile)throws PDFException, PDFSecurityException, IOException {
 
 		// ICEpdf document class
 		
@@ -55,26 +55,27 @@ public class Pdf2Jpg {
 		for (int i = 0; i < len; i++) {
 			img = (BufferedImage) document.getPageImage(i,GraphicsRenderingHints.SCREEN,
 					Page.BOUNDARY_CROPBOX,rotation,zoom);
+
 			//设置图片的后缀名
 			Iterator iter = ImageIO.getImageWritersBySuffix(FILETYPE_PNG);
-			
 			ImageWriter writer = (ImageWriter) iter.next();
-			
 			File outFile = new File(destFile+FileName+"_"+(i+1)+".png");
-			
 			FileOutputStream out = new FileOutputStream(outFile);
-			
 			ImageOutputStream outImage = ImageIO.createImageOutputStream(out);
-			
-			writer.setOutput(outImage);
-			
-			writer.write(new IIOImage(img, null, null));
+			try {
+				writer.setOutput(outImage);
+				writer.write(new IIOImage(img, null, null));
+			} finally {
+				outImage.close();
+				out.close();
+			}
 		}
 		img.flush();
 		document.dispose();
 		System.out.println("转化成功！！！ ");
-		return 0;
+		return len;
 	}
+
 	public static void main(String[] args) {
 		try {
 			String sourceFile ="C:\\Users\\SqList\\Documents\\Tencent Files\\574146616\\FileRecv\\文档.pdf";

@@ -13,8 +13,12 @@ import com.tosim.fileshare.common.mapper.FsUserMapper;
 import com.tosim.fileshare.common.util.FastDFSUtil;
 import com.tosim.fileshare.common.util.SFileUtils;
 import com.tosim.fileshare.web.service.FileService;
+import com.tosim.fileshare.web.util.OfficeToPDF;
+import com.tosim.fileshare.web.util.Tojpg.Pdf2Jpg;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.icepdf.core.exceptions.PDFException;
+import org.icepdf.core.exceptions.PDFSecurityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,25 +44,79 @@ public class FileServiceImpl implements FileService {
     @Autowired
     FsUserFileMapper fsUserFileMapper;
 
+//    private final
+
     @Override
     public void upload(MultipartFile file, String fileName, String introduce, Integer point, String ownerUserId) {
         try {
             String storageUri = FastDFSUtil.getInstance().upload(file.getBytes(), SFileUtils.getSuffix(file.getOriginalFilename()));
-            log.info("路径: " + storageUri);
+            log.info("storage: " + storageUri);
             FsFile uploadedFile = new FsFile();
             uploadedFile.setCreateTime(Calendar.getInstance().getTime());
             uploadedFile.setFileId(UUID.randomUUID().toString().replaceAll("-", ""));
             uploadedFile.setFileName(fileName);
             uploadedFile.setOwner(ownerUserId);
-            uploadedFile.setReduceFlag("todo...");
+            // TODO
+            uploadedFile.setReduceFlag(UUID.randomUUID().toString().replaceAll("-", ""));
             uploadedFile.setPoint(point);
             uploadedFile.setSuffix(SFileUtils.getSuffix(fileName));
             uploadedFile.setPrivateFlag(false);
             uploadedFile.setSize((int) file.getSize());
             uploadedFile.setStorageUri(storageUri);
             uploadedFile.setUpdateTime(uploadedFile.getCreateTime());
+
+            if (SFileUtils.isOffice(uploadedFile.getSuffix()) || "pdf".equals(uploadedFile.getSuffix())) {
+                log.info("office文件或pdf文件");
+                String dirUrl = "E:\\Workspace\\tmp\\";
+                String fileUrl = dirUrl + ownerUserId + "-" + file.getOriginalFilename().split("\\.")[0];
+                log.info("源文件路径（不包括后缀）: {}", fileUrl);
+                File tmpOldFile = new File(fileUrl + "." + uploadedFile.getSuffix());
+                file.transferTo(tmpOldFile);
+                boolean isPdf = false;
+
+                // .doc .docx .xls .xlsx .ppt .pptx
+                if (SFileUtils.isOffice(uploadedFile.getSuffix())) {
+                    OfficeToPDF.office2PDF(fileUrl + "." + uploadedFile.getSuffix(), fileUrl + ".pdf");
+                    tmpOldFile.delete();
+                    isPdf = true;
+                }
+
+                // .pdf
+                if ("pdf".equals(uploadedFile.getSuffix()) || isPdf) {
+                    File tmpFile = new File(fileUrl + ".pdf");
+                    int len = Pdf2Jpg.tranfer(fileUrl + ".pdf", dirUrl);
+                    tmpFile.delete();
+
+                    StringBuilder previewStr = new StringBuilder();
+                    for (int i = 1; i <= len; i++) {
+                        File tmpPng = new File(fileUrl + "_" + i + ".png");
+                        String previewUrl = FastDFSUtil.getInstance().upload(
+                                FileUtils.readFileToByteArray(tmpPng),
+                                "png");
+                        if (i != 1) {
+                            previewStr.append(";");
+                        }
+                        previewStr.append(previewUrl);
+                    }
+                    uploadedFile.setPreviewUri(previewStr.toString());
+
+                    // 删除
+                    for (int i = 1; i <= len; i++) {
+                        File tmpPng = new File(fileUrl + "_" + i + ".png");
+                        tmpPng.delete();
+                    }
+                }
+            }
+
             fsFileMapper.insertSelective(uploadedFile);
+
         } catch (IOException e) {
+            throw new BusinessException(ErrorCodes.UPLOAD_FILE_FAILED);
+        } catch (PDFException e) {
+            e.printStackTrace();
+            throw new BusinessException(ErrorCodes.UPLOAD_FILE_FAILED);
+        } catch (PDFSecurityException e) {
+            e.printStackTrace();
             throw new BusinessException(ErrorCodes.UPLOAD_FILE_FAILED);
         }
 

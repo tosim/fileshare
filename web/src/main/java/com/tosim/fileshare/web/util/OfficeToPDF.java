@@ -81,8 +81,8 @@ public class OfficeToPDF {
 	}
 
 	public static void main(String[] args) {
-		String sourceFile = "C:\\Users\\SqList\\Documents\\Tencent Files\\574146616\\FileRecv\\文档.docx";
-		String destFile = "C:\\Users\\SqList\\Documents\\Tencent Files\\574146616\\FileRecv\\文档.pdf";
+		String sourceFile = "D:\\课程\\大三\\大数据\\ppt\\大数据分析_1.pptx";
+		String destFile = "D:\\课程\\大三\\大数据\\ppt\\大数据分析_1.pdf";
 		office2PDF(sourceFile, destFile);
 	}
 }
