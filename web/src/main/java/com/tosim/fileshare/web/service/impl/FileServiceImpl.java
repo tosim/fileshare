@@ -13,6 +13,7 @@ import com.tosim.fileshare.common.mapper.FsUserMapper;
 import com.tosim.fileshare.common.util.FastDFSUtil;
 import com.tosim.fileshare.common.util.SFileUtils;
 import com.tosim.fileshare.web.service.FileService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+@Slf4j
 @Service
 public class FileServiceImpl implements FileService {
 
@@ -42,14 +44,19 @@ public class FileServiceImpl implements FileService {
     public void upload(MultipartFile file, String fileName, String introduce, Integer point, String ownerUserId) {
         try {
             String storageUri = FastDFSUtil.getInstance().upload(file.getBytes(), SFileUtils.getSuffix(file.getOriginalFilename()));
+            log.info("路径: " + storageUri);
             FsFile uploadedFile = new FsFile();
             uploadedFile.setCreateTime(Calendar.getInstance().getTime());
             uploadedFile.setFileId(UUID.randomUUID().toString().replaceAll("-", ""));
             uploadedFile.setFileName(fileName);
             uploadedFile.setOwner(ownerUserId);
+            uploadedFile.setReduceFlag("todo...");
+            uploadedFile.setPoint(point);
+            uploadedFile.setSuffix(SFileUtils.getSuffix(fileName));
             uploadedFile.setPrivateFlag(false);
             uploadedFile.setSize((int) file.getSize());
             uploadedFile.setStorageUri(storageUri);
+            uploadedFile.setUpdateTime(uploadedFile.getCreateTime());
             fsFileMapper.insertSelective(uploadedFile);
         } catch (IOException e) {
             throw new BusinessException(ErrorCodes.UPLOAD_FILE_FAILED);
