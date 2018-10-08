@@ -1,5 +1,6 @@
 package com.tosim.fileshare.common.config.web;
 
+import com.google.common.base.Throwables;
 import com.tosim.fileshare.common.config.exception.BusinessException;
 import com.tosim.fileshare.common.config.exception.ParamException;
 import com.tosim.fileshare.common.constants.ErrorCodes;
@@ -68,7 +69,7 @@ public class GlobalDefaultExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public RespJson exceptionHandler(Exception exception) {
-        log.error("其他异常：\n{}", exception.getStackTrace());
+        log.error("其他异常：\n{}", Throwables.getStackTraceAsString(exception));
         return ResultUtil.error("E0000","其他异常：" + exception.getMessage());
 //        return ResultUtil.error(ErrorCodes.SYSTEM_ERROR);
     }

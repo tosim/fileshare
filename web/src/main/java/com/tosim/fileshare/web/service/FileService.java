@@ -1,9 +1,11 @@
 package com.tosim.fileshare.web.service;
 
+import com.github.pagehelper.PageInfo;
 import com.tosim.fileshare.common.domain.FsUser;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface FileService {
 
@@ -11,6 +13,6 @@ public interface FileService {
 
     void download(String fileId, FsUser fsUser);
 
-    List searchFiles(String keyword);
+    Map searchFiles(String keyword, Integer page, Integer pageSize);
 
 }

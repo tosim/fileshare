@@ -1,5 +1,7 @@
 package com.tosim.fileshare.web.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.tosim.fileshare.common.config.exception.BusinessException;
 import com.tosim.fileshare.common.constants.ErrorCodes;
 import com.tosim.fileshare.common.domain.FsFile;
@@ -10,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -42,8 +42,16 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List searchFiles(String keyword) {
-        return null;
+    public Map searchFiles(String keyword, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        List<FsFile> fsFiles = fsFileMapper.selectByFileName(keyword);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("keyword", keyword);
+        map.put("page", page);
+        map.put("pageSize", pageSize);
+        map.put("total", ((Page)fsFiles).getTotal());
+        map.put("list", fsFiles);
+        return map;
     }
 
 }
