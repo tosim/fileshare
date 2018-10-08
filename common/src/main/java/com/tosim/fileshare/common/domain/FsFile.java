@@ -29,9 +29,6 @@ public class FsFile {
     @Column(name = "reduce_flag")
     private String reduceFlag;
 
-    @Column(name = "storage_server")
-    private String storageServer;
-
     @Column(name = "storage_uri")
     private String storageUri;
 
@@ -185,20 +182,6 @@ public class FsFile {
      */
     public void setReduceFlag(String reduceFlag) {
         this.reduceFlag = reduceFlag == null ? null : reduceFlag.trim();
-    }
-
-    /**
-     * @return storage_server
-     */
-    public String getStorageServer() {
-        return storageServer;
-    }
-
-    /**
-     * @param storageServer
-     */
-    public void setStorageServer(String storageServer) {
-        this.storageServer = storageServer == null ? null : storageServer.trim();
     }
 
     /**
