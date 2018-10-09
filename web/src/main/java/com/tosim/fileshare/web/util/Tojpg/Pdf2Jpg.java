@@ -33,7 +33,7 @@ public class Pdf2Jpg {
 		float rotation = 0f;
 		float zoom = 1.5f;
 		
-		//ÅĞ¶ÏÄ¿Â¼ÊÇ·ñ´æÔÚ£¬Èç¹û²»´æÔÚµÄ»°Ôò´´½¨
+		//åˆ¤æ–­ç›®å½•æ˜¯å¦å­˜åœ¨ï¼Œå¦‚æœä¸å­˜åœ¨çš„è¯åˆ™åˆ›å»º
 		File file = new File(destFile);
 		if (!file.exists()) {
 			file.mkdirs();
@@ -41,8 +41,8 @@ public class Pdf2Jpg {
 		
 		File inputFile = new File(sourceFile);  
 		if (!inputFile.exists()) {  
-			System.out.println("ÕÒ²»µ½Ô´ÎÄ¼ş");
-			return -1;// ÕÒ²»µ½Ô´ÎÄ¼ş, Ôò·µ»Ø-1  
+			System.out.println("æ‰¾ä¸åˆ°æºæ–‡ä»¶");
+			return -1;// æ‰¾ä¸åˆ°æºæ–‡ä»¶, åˆ™è¿”å›-1  
 		}  
 		document = new Document();
 
@@ -51,12 +51,12 @@ public class Pdf2Jpg {
 		// maxPages = document.getPageTree().getNumberOfPages();
 
 		int len = document.getNumberOfPages() < 3 ? document.getNumberOfPages() : 3;
-		//½øĞĞpdfÎÄ¼şÍ¼Æ¬µÄ×ª»¯
+		//è¿›è¡Œpdfæ–‡ä»¶å›¾ç‰‡çš„è½¬åŒ–
 		for (int i = 0; i < len; i++) {
 			img = (BufferedImage) document.getPageImage(i,GraphicsRenderingHints.SCREEN,
 					Page.BOUNDARY_CROPBOX,rotation,zoom);
 
-			//ÉèÖÃÍ¼Æ¬µÄºó×ºÃû
+			//è®¾ç½®å›¾ç‰‡çš„åç¼€å
 			Iterator iter = ImageIO.getImageWritersBySuffix(FILETYPE_PNG);
 			ImageWriter writer = (ImageWriter) iter.next();
 			File outFile = new File(destFile+FileName+"_"+(i+1)+".png");
@@ -72,13 +72,13 @@ public class Pdf2Jpg {
 		}
 		img.flush();
 		document.dispose();
-		System.out.println("×ª»¯³É¹¦£¡£¡£¡ ");
+		System.out.println("è½¬åŒ–æˆåŠŸï¼ï¼ï¼ ");
 		return len;
 	}
 
 	public static void main(String[] args) {
 		try {
-			String sourceFile ="C:\\Users\\SqList\\Documents\\Tencent Files\\574146616\\FileRecv\\ÎÄµµ.pdf";
+			String sourceFile ="C:\\Users\\SqList\\Documents\\Tencent Files\\574146616\\FileRecv\\æ–‡æ¡£.pdf";
 			String destFile="d:\\tmp\\";
 			Pdf2Jpg pdf = new Pdf2Jpg();
 			pdf.tranfer(sourceFile,destFile);

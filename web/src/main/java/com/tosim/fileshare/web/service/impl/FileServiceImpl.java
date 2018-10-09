@@ -211,10 +211,23 @@ public class FileServiceImpl implements FileService {
         String previewUri = fsFile.getPreviewUri();
         if(previewUri == null || previewUri.equals(""))
             throw new ParamException("此文件无预览");
-        String[] previewDownloadUriList = previewUri.split(",");
+        String[] previewDownloadUriList = previewUri.split(";");
         List<String> base64List = new ArrayList<>();
         for(int i = 0;i < previewDownloadUriList.length;i++)
             base64List.add(Base64.encodeBase64String(FastDFSUtil.getInstance().download(previewDownloadUriList[i])));
         return base64List;
+    }
+
+    @Override
+    public Map searchOwnFiles(String ownerUserId, String keyword, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        List<FsFile> fsFiles = fsFileMapper.selectByFileNameAndUserId(ownerUserId, keyword);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("keyword", keyword);
+        map.put("page", page);
+        map.put("pageSize", pageSize);
+        map.put("total", ((Page)fsFiles).getTotal());
+        map.put("list", fsFiles);
+        return map;
     }
 }

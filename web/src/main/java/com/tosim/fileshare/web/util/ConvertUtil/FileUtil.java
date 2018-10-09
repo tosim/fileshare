@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class FileUtil {
 
-	// ÓÃÓÚ×ª»»txt¸ñÊ½µÄ×ª»»
+	// ç”¨äºè½¬æ¢txtæ ¼å¼çš„è½¬æ¢
 	public static void copyFile(String inputFile, String outputFile)
 			throws FileNotFoundException {
 		File sFile = new File(inputFile);

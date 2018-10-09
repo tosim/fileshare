@@ -21,4 +21,6 @@ public interface FileService {
     void updateFile(String fileName, String introduce, Integer point, String fileId);
 
     List<String> getPreviewPngBase64(String fileId);
+
+    Map searchOwnFiles(String ownerUserId, String keyword, Integer page, Integer pageSize);
 }
