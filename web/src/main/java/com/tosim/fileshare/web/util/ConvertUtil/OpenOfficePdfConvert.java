@@ -8,7 +8,7 @@ import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
 import org.artofsolving.jodconverter.office.OfficeManager;
 
 
-//×ª»»ÎÄµµÎªpdf
+//è½¬æ¢æ–‡æ¡£ä¸ºpdf
 public class OpenOfficePdfConvert {
 
 	/**
@@ -19,15 +19,15 @@ public class OpenOfficePdfConvert {
 	private static int port[] = { 8100 };
     
 	/**
-	 * ×ª»»³ÉPDFÎÄ¼ş;
-	 * @param inputFile Ô´ÎÄ¼ş
-	 * @param outputFile Ä¿±êÊä³öÎÄ¼ş
-	 * @throws FileNotFoundException ÕÒ²»×ÅÎÄ¼şÒì³£;
+	 * è½¬æ¢æˆPDFæ–‡ä»¶;
+	 * @param inputFile æºæ–‡ä»¶
+	 * @param outputFile ç›®æ ‡è¾“å‡ºæ–‡ä»¶
+	 * @throws FileNotFoundException æ‰¾ä¸ç€æ–‡ä»¶å¼‚å¸¸;
 	 */
 	public void convert2PDF(String inputFile, String outputFile) throws FileNotFoundException {
 	   
 		String fileName = null;
-	    /* 1  ½øĞĞ×ª»» ²Ù×÷
+	    /* 1  è¿›è¡Œè½¬æ¢ æ“ä½œ
 	     * 2 start service
 	     * 3 deal  tranlate
 	     * 3 stop service
@@ -36,7 +36,7 @@ public class OpenOfficePdfConvert {
 	    if(inputFile.endsWith("txt")){
 	    	String odtFile = fileName1+".odt";
 	    	if(new File(odtFile).exists()){
-	    		System.out.println("odtÎÄ¼şÒÑ´æÔÚ£¡");
+	    		System.out.println("odtæ–‡ä»¶å·²å­˜åœ¨ï¼");
 	    		inputFile = odtFile;
 	    	}else{
                 FileUtil.copyFile(inputFile, odtFile);
@@ -45,7 +45,7 @@ public class OpenOfficePdfConvert {
 	    }
 	    
 		startService();
-		System.out.println("½øĞĞÎÄµµ×ª»»×ª»»:" + inputFile + " --> " + outputFile);
+		System.out.println("è¿›è¡Œæ–‡æ¡£è½¬æ¢è½¬æ¢:" + inputFile + " --> " + outputFile);
 		
 		OfficeDocumentConverter converter = new OfficeDocumentConverter(officeManager);
 		converter.convert(new File(inputFile), new File(outputFile));
@@ -55,45 +55,45 @@ public class OpenOfficePdfConvert {
 
 	}
 
-	// ´ò¿ª·şÎñÆ÷
+	// æ‰“å¼€æœåŠ¡å™¨
 	public static void startService() {
 		DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
 		try {
-			System.out.println("×¼±¸Æô¶¯·şÎñ....");
-			configuration.setOfficeHome(OFFICE_HOME);// ÉèÖÃOpenOffice.org°²×°Ä¿Â¼
-			configuration.setPortNumbers(port); // ÉèÖÃ×ª»»¶Ë¿Ú£¬Ä¬ÈÏÎª8100
-			configuration.setTaskExecutionTimeout(1000 * 60 * 5L);// ÉèÖÃÈÎÎñÖ´ĞĞ³¬Ê±Îª5·ÖÖÓ
-			configuration.setTaskQueueTimeout(1000 * 60 * 60 * 24L);// ÉèÖÃÈÎÎñ¶ÓÁĞ³¬Ê±Îª24Ğ¡Ê±
+			System.out.println("å‡†å¤‡å¯åŠ¨æœåŠ¡....");
+			configuration.setOfficeHome(OFFICE_HOME);// è®¾ç½®OpenOffice.orgå®‰è£…ç›®å½•
+			configuration.setPortNumbers(port); // è®¾ç½®è½¬æ¢ç«¯å£ï¼Œé»˜è®¤ä¸º8100
+			configuration.setTaskExecutionTimeout(1000 * 60 * 5L);// è®¾ç½®ä»»åŠ¡æ‰§è¡Œè¶…æ—¶ä¸º5åˆ†é’Ÿ
+			configuration.setTaskQueueTimeout(1000 * 60 * 60 * 24L);// è®¾ç½®ä»»åŠ¡é˜Ÿåˆ—è¶…æ—¶ä¸º24å°æ—¶
 
 			officeManager = configuration.buildOfficeManager();
-			officeManager.start(); // Æô¶¯·şÎñ
-			System.out.println("office×ª»»·şÎñÆô¶¯³É¹¦!");
+			officeManager.start(); // å¯åŠ¨æœåŠ¡
+			System.out.println("officeè½¬æ¢æœåŠ¡å¯åŠ¨æˆåŠŸ!");
 		} catch (Exception ce) {
-			System.out.println("office×ª»»·şÎñÆô¶¯Ê§°Ü!ÏêÏ¸ĞÅÏ¢:" + ce);
+			System.out.println("officeè½¬æ¢æœåŠ¡å¯åŠ¨å¤±è´¥!è¯¦ç»†ä¿¡æ¯:" + ce);
 		}
 	}
 
-	// ¹Ø±Õ·şÎñÆ÷
+	// å…³é—­æœåŠ¡å™¨
 	public static void stopService() {
-		System.out.println("¹Ø±Õoffice×ª»»·şÎñ....");
+		System.out.println("å…³é—­officeè½¬æ¢æœåŠ¡....");
 		if (officeManager != null) {
 			officeManager.stop();
 		}
-		System.out.println("¹Ø±Õoffice×ª»»³É¹¦!");
+		System.out.println("å…³é—­officeè½¬æ¢æˆåŠŸ!");
 	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String inputFile = "d:\\resource\\¼¯ÍÅµ¥Î»ĞÅÏ¢µ¼ÈëÄ£°æ.xls";
+		String inputFile = "d:\\resource\\é›†å›¢å•ä½ä¿¡æ¯å¯¼å…¥æ¨¡ç‰ˆ.xls";
 		String destFile = "d:\\resource\\1.pdf";
 		File file = new File(inputFile);
-		//ÅĞ¶ÏÎÄ¼şÊÇ·ñ´æÔÚ¡£
+		//åˆ¤æ–­æ–‡ä»¶æ˜¯å¦å­˜åœ¨ã€‚
 		if (file.exists()) {
-			System.out.println("ÓĞÎÄ¼ş£º"+file.getName());
+			System.out.println("æœ‰æ–‡ä»¶ï¼š"+file.getName());
 		}else {
-			System.out.println("ºÃÏñÃ»ÓĞÓ´");
+			System.out.println("å¥½åƒæ²¡æœ‰å“Ÿ");
 		}
-		//ÅĞ¶ÏÄ¿Â¼ÊÇ·ñ´æÔÚ
+		//åˆ¤æ–­ç›®å½•æ˜¯å¦å­˜åœ¨
 		File outputFile = new File(destFile);
 		if (!outputFile.getParentFile().exists()) {
 			outputFile.getParentFile().mkdirs();

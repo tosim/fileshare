@@ -217,4 +217,17 @@ public class FileServiceImpl implements FileService {
             base64List.add(Base64.encodeBase64String(FastDFSUtil.getInstance().download(previewDownloadUriList[i])));
         return base64List;
     }
+
+    @Override
+    public Map searchOwnFiles(String ownerUserId, String keyword, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        List<FsFile> fsFiles = fsFileMapper.selectByFileNameAndUserId(ownerUserId, keyword);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("keyword", keyword);
+        map.put("page", page);
+        map.put("pageSize", pageSize);
+        map.put("total", ((Page)fsFiles).getTotal());
+        map.put("list", fsFiles);
+        return map;
+    }
 }

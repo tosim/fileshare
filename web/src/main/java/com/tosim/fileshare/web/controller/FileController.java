@@ -41,14 +41,25 @@ public class FileController {
         return ResultUtil.success();
     }
 
-    @RequiresUser
     @ResponseBody
     @GetMapping(value = {"/search"})
     public RespJson search(String keyword,
                            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                            @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
-        log.info("fileName: " + keyword + ", page: " + page);
+        log.info("fileName: " + keyword + ", page: " + page + ", pageSize: " + pageSize);
         return ResultUtil.success(fileService.searchFiles(keyword, page, pageSize));
+    }
+
+    @RequiresUser
+    @ResponseBody
+    @GetMapping("/searchOwn")
+    public RespJson searchOwn(String keyword,
+                              @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                              @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        Subject subject = SecurityUtils.getSubject();
+        FsUser loginUser = (FsUser) subject.getSession().getAttribute(Constants.USER_SESSION);
+        log.info("user: " + loginUser.getUserName() + ", fileName: " + keyword + ", page: " + page + ", pageSize: " + pageSize);
+        return ResultUtil.success(fileService.searchOwnFiles(loginUser.getUserId(), keyword, page, pageSize));
     }
 
     @GetMapping("/user")

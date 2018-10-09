@@ -13,42 +13,42 @@ import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConv
 public class OfficeToPDF {
 	/** 
 	 * <pre> 
-	 * ·½·¨Ê¾Àı: 
+	 * æ–¹æ³•ç¤ºä¾‹: 
 	 * String sourcePath = "F:\\office\\source.doc"; 
 	 * String destFile = "F:\\pdf\\dest.pdf"; 
 	 * Converter.office2PDF(sourcePath, destFile); 
 	 * </pre> 
 	 *  
 	 * @param sourceFile 
-	 *            Ô´ÎÄ¼ş, ¾ø¶ÔÂ·¾¶. ¿ÉÒÔÊÇOffice2003-2007È«²¿¸ñÊ½µÄÎÄµµ, Office2010µÄÃ»²âÊÔ. °üÀ¨.doc, 
-	 *            .docx, .xls, .xlsx, .ppt, .pptxµÈ. Ê¾Àı: F:\\office\\source.doc 
+	 *            æºæ–‡ä»¶, ç»å¯¹è·¯å¾„. å¯ä»¥æ˜¯Office2003-2007å…¨éƒ¨æ ¼å¼çš„æ–‡æ¡£, Office2010çš„æ²¡æµ‹è¯•. åŒ…æ‹¬.doc, 
+	 *            .docx, .xls, .xlsx, .ppt, .pptxç­‰. ç¤ºä¾‹: F:\\office\\source.doc 
 	 * @param destFile 
-	 *            Ä¿±êÎÄ¼ş. ¾ø¶ÔÂ·¾¶. Ê¾Àı: F:\\pdf\\dest.pdf 
-	 * @return ²Ù×÷³É¹¦Óë·ñµÄÌáÊ¾ĞÅÏ¢. Èç¹û·µ»Ø -1, ±íÊ¾ÕÒ²»µ½Ô´ÎÄ¼ş, »òurl.propertiesÅäÖÃ´íÎó; Èç¹û·µ»Ø 0, 
-	 *         Ôò±íÊ¾²Ù×÷³É¹¦; ·µ»Ø1, Ôò±íÊ¾×ª»»Ê§°Ü 
+	 *            ç›®æ ‡æ–‡ä»¶. ç»å¯¹è·¯å¾„. ç¤ºä¾‹: F:\\pdf\\dest.pdf 
+	 * @return æ“ä½œæˆåŠŸä¸å¦çš„æç¤ºä¿¡æ¯. å¦‚æœè¿”å› -1, è¡¨ç¤ºæ‰¾ä¸åˆ°æºæ–‡ä»¶, æˆ–url.propertiesé…ç½®é”™è¯¯; å¦‚æœè¿”å› 0, 
+	 *         åˆ™è¡¨ç¤ºæ“ä½œæˆåŠŸ; è¿”å›1, åˆ™è¡¨ç¤ºè½¬æ¢å¤±è´¥ 
 	 */  
 	public static int office2PDF(String sourceFile, String destFile) {  
 		try {  
 			File inputFile = new File(sourceFile);  
 			if (!inputFile.exists()) {  
-				return -1;// ÕÒ²»µ½Ô´ÎÄ¼ş, Ôò·µ»Ø-1  
+				return -1;// æ‰¾ä¸åˆ°æºæ–‡ä»¶, åˆ™è¿”å›-1  
 			}  
 
-			// Èç¹ûÄ¿±êÂ·¾¶²»´æÔÚ, ÔòĞÂ½¨¸ÃÂ·¾¶  
+			// å¦‚æœç›®æ ‡è·¯å¾„ä¸å­˜åœ¨, åˆ™æ–°å»ºè¯¥è·¯å¾„  
 			File outputFile = new File(destFile);  
 			if (!outputFile.getParentFile().exists()) {  
 				outputFile.getParentFile().mkdirs();  
 			}  
 
-			//ÕâÀïÊÇOpenOfficeµÄ°²×°Ä¿Â¼, ÔÚÎÒµÄÏîÄ¿ÖĞ,ÎªÁË±ãÓÚÍØÕ¹½Ó¿Ú,Ã»ÓĞÖ±½ÓĞ´³ÉÕâ¸öÑù×Ó,µ«ÊÇÕâÑùÊÇ¾ø¶ÔÃ»ÎÊÌâµÄ  
+			//è¿™é‡Œæ˜¯OpenOfficeçš„å®‰è£…ç›®å½•, åœ¨æˆ‘çš„é¡¹ç›®ä¸­,ä¸ºäº†ä¾¿äºæ‹“å±•æ¥å£,æ²¡æœ‰ç›´æ¥å†™æˆè¿™ä¸ªæ ·å­,ä½†æ˜¯è¿™æ ·æ˜¯ç»å¯¹æ²¡é—®é¢˜çš„  
 			String OpenOffice_HOME = "C:\\Program Files (x86)\\OpenOffice 4";
 
-			// Èç¹û´ÓÎÄ¼şÖĞ¶ÁÈ¡µÄURLµØÖ·×îºóÒ»¸ö×Ö·û²»ÊÇ '\'£¬ÔòÌí¼Ó'\'  
+			// å¦‚æœä»æ–‡ä»¶ä¸­è¯»å–çš„URLåœ°å€æœ€åä¸€ä¸ªå­—ç¬¦ä¸æ˜¯ '\'ï¼Œåˆ™æ·»åŠ '\'  
 			if (OpenOffice_HOME.charAt(OpenOffice_HOME.length() - 1) != '\\') {  
 				OpenOffice_HOME += "\\";  
 			}  
 
-			// Æô¶¯OpenOfficeµÄ·şÎñ  
+			// å¯åŠ¨OpenOfficeçš„æœåŠ¡  
 			String command = OpenOffice_HOME  
 			+ "program\\soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\"-nofirststartwizard";
 			Process pro = Runtime.getRuntime().exec(command);  
@@ -57,14 +57,14 @@ public class OfficeToPDF {
 					"127.0.0.1", 8100);
 			connection.connect();  
 
-			//×ª»»  
+			//è½¬æ¢  
 			DocumentConverter converter = new OpenOfficeDocumentConverter(  
 					connection);  
 			converter.convert(inputFile, outputFile);  
 
-			//¹Ø±ÕÁ´½Ó  
+			//å…³é—­é“¾æ¥  
 			connection.disconnect();  
-			// ¹Ø±ÕOpenOffice·şÎñµÄ½ø³Ì  
+			// å…³é—­OpenOfficeæœåŠ¡çš„è¿›ç¨‹  
 			pro.destroy();  
 			System.out.println("1234");
 			return 0;  
@@ -81,8 +81,8 @@ public class OfficeToPDF {
 	}
 
 	public static void main(String[] args) {
-		String sourceFile = "D:\\¿Î³Ì\\´óÈı\\´óÊı¾İ\\ppt\\´óÊı¾İ·ÖÎö_1.pptx";
-		String destFile = "D:\\¿Î³Ì\\´óÈı\\´óÊı¾İ\\ppt\\´óÊı¾İ·ÖÎö_1.pdf";
-		office2PDF(sourceFile, destFile);
+//		String sourceFile = "D:\\è¯¾ç¨‹\\å¤§ä¸‰\\å¤§æ•°æ®\\ppt\\å¤§æ•°æ®åˆ†æ_1.pptx";
+//		String destFile = "D:\\è¯¾ç¨‹\\å¤§ä¸‰\\å¤§æ•°æ®\\ppt\\å¤§æ•°æ®åˆ†æ_1.pdf";
+//		office2PDF(sourceFile, destFile);
 	}
 }
