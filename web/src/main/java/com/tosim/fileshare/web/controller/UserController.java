@@ -45,7 +45,7 @@ public class UserController {
     @RequiresUser
     @PostMapping("/update")
     public RespJson updateUser(String gender, String introduce) {
-        FsUser loginUser = (FsUser) SecurityUtils.getSubject().getSession().getAttribute(Constants.USER_SESSION);
+        FsUser loginUser = sessionService.getSessionedUserBySession(SecurityUtils.getSubject().getSession());
         userService.updateUser(gender, introduce, loginUser.getId());
         sessionService.removeSessionedUserBySession(SecurityUtils.getSubject().getSession());
         return ResultUtil.success();

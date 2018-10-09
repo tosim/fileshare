@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
         registUser.setUserId(UUID.randomUUID().toString().replaceAll("-",""));
         registUser.setLoginTime(registUser.getCreateTime());
         registUser.setLoginIp(0);
+        registUser.setGender("保密");
         fsUserMapper.insertSelective(registUser);
     }
 

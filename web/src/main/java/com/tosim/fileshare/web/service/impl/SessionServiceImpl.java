@@ -36,17 +36,17 @@ public class SessionServiceImpl implements SessionService {
         if(session == null) return null;
         FsUser loginUser = (FsUser) session.getAttribute(Constants.USER_SESSION);
         if(loginUser == null){
-            Integer userId = (Integer) session.getAttribute(Constants.USER_ID);
-            loginUser = userMapper.selectByPrimaryKey(userId);
+            String userId = (String) session.getAttribute(Constants.USER_ID);
+            loginUser = userMapper.selectByUserId(userId);
             session.setAttribute(Constants.USER_SESSION,loginUser);
         }
         return loginUser;
     }
 
     @Override
-    public Integer getSessionedUserIdBySession(Session session){
+    public String getSessionedUserIdBySession(Session session){
         if(session == null) return null;
-        Integer userId = (Integer) session.getAttribute(Constants.USER_ID);
+        String userId = (String) session.getAttribute(Constants.USER_ID);
         return userId;
     }
 

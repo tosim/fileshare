@@ -22,4 +22,6 @@ public interface FsUserMapper extends MyMapper<FsUser> {
     @Update("update fs_user set points=points-#{subPoint} where user_id=#{userId}")
     int subUserPoint(@Param("subPoint")Integer subPoint, @Param("userId")String userId);
 
+    @Select("select * from fs_user where user_id=#{userId}")
+    FsUser selectByUserId(String userId);
 }

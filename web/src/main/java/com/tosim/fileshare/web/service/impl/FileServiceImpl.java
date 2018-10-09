@@ -3,6 +3,7 @@ package com.tosim.fileshare.web.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.tosim.fileshare.common.config.exception.BusinessException;
+import com.tosim.fileshare.common.config.exception.ParamException;
 import com.tosim.fileshare.common.constants.ErrorCodes;
 import com.tosim.fileshare.common.domain.FsFile;
 import com.tosim.fileshare.common.domain.FsUser;
@@ -14,6 +15,7 @@ import com.tosim.fileshare.common.util.FastDFSUtil;
 import com.tosim.fileshare.common.util.SFileUtils;
 import com.tosim.fileshare.web.service.FileService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -135,5 +137,18 @@ public class FileServiceImpl implements FileService {
         fsFile.setPoint(point);
         fsFile.setId(id);
         fsFileMapper.updateByPrimaryKeySelective(fsFile);
+    }
+
+    @Override
+    public List<String> getPreviewPngBase64(String fileId) {
+        FsFile fsFile = fsFileMapper.selectByFileId(fileId);
+        String previewUri = fsFile.getPreviewUri();
+        if(previewUri == null || previewUri.equals(""))
+            throw new ParamException("此文件无预览");
+        String[] previewDownloadUriList = previewUri.split(",");
+        List<String> base64List = new ArrayList<>();
+        for(int i = 0;i < previewDownloadUriList.length;i++)
+            base64List.add(Base64.encodeBase64String(FastDFSUtil.getInstance().download(previewDownloadUriList[i])));
+        return base64List;
     }
 }

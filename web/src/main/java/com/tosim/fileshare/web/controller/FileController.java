@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -71,5 +72,12 @@ public class FileController {
         FsUser loginUser = sessionService.getSessionedUserBySession(SecurityUtils.getSubject().getSession());
         sessionService.removeSessionedUserBySession(SecurityUtils.getSubject().getSession());
         return fileService.download(fileIds, loginUser);
+    }
+
+    @ResponseBody
+    @GetMapping("/{fileId}/preview")
+    public RespJson getPreviewPngBase64(@PathVariable("fileId")String fileId) {
+        List<String> base64PngList = fileService.getPreviewPngBase64(fileId);
+        return ResultUtil.success(base64PngList);
     }
 }

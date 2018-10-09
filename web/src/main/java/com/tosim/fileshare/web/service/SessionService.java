@@ -11,5 +11,5 @@ public interface SessionService {
 
     FsUser getSessionedUserBySession(Session session);
 
-    Integer getSessionedUserIdBySession(Session session);
+    String getSessionedUserIdBySession(Session session);
 }
