@@ -11,6 +11,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,5 +51,13 @@ public class SessionController {
             return ResultUtil.success(sessionService.getSessionedUserBySession(subject.getSession()));
         else
             return ResultUtil.error(ErrorCodes.UNAUTHENTICATED);
+    }
+
+    @RequiresUser
+    @GetMapping("/logout")
+    public RespJson logout(){
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return ResultUtil.success();
     }
 }

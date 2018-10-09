@@ -211,7 +211,7 @@ public class FileServiceImpl implements FileService {
         String previewUri = fsFile.getPreviewUri();
         if(previewUri == null || previewUri.equals(""))
             throw new ParamException("此文件无预览");
-        String[] previewDownloadUriList = previewUri.split(",");
+        String[] previewDownloadUriList = previewUri.split(";");
         List<String> base64List = new ArrayList<>();
         for(int i = 0;i < previewDownloadUriList.length;i++)
             base64List.add(Base64.encodeBase64String(FastDFSUtil.getInstance().download(previewDownloadUriList[i])));
