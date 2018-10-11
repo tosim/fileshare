@@ -37,7 +37,7 @@ public class GlobalDefaultExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     @ResponseBody
     public RespJson businessExcepitonHandler(BusinessException businessException) {
-            log.error("业务异常：{}", businessException.getMessage());
+            log.error("业务异常：{}", Throwables.getStackTraceAsString(businessException));
             return ResultUtil.error(businessException);
     }
 

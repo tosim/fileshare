@@ -3,6 +3,7 @@ package com.tosim.fileshare.web.controller;
 import com.tosim.fileshare.common.config.web.RespJson;
 import com.tosim.fileshare.common.config.web.ResultUtil;
 import com.tosim.fileshare.common.constants.Constants;
+import com.tosim.fileshare.common.constants.ErrorCodes;
 import com.tosim.fileshare.common.domain.FsUser;
 import com.tosim.fileshare.web.service.FileService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,10 @@ public class FileController {
     @ResponseBody
     @PostMapping("")
     public RespJson upload(MultipartFile file, String fileName, String introduce, Integer point) {
+        if (file == null) {
+            log.info("文件为空");
+            return ResultUtil.error(ErrorCodes.UPLOAD_FILE_FAILED);
+        }
         Subject subject = SecurityUtils.getSubject();
         FsUser loginUser = (FsUser) subject.getSession().getAttribute(Constants.USER_SESSION);
         fileService.upload(file, fileName, introduce, point, loginUser.getUserId());
@@ -55,11 +60,23 @@ public class FileController {
     @GetMapping("/searchOwn")
     public RespJson searchOwn(String keyword,
                               @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                              @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+                              @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
+                              String attr,
+                              Integer order) {  // 1:升序 0:降序
         Subject subject = SecurityUtils.getSubject();
         FsUser loginUser = (FsUser) subject.getSession().getAttribute(Constants.USER_SESSION);
         log.info("user: " + loginUser.getUserName() + ", fileName: " + keyword + ", page: " + page + ", pageSize: " + pageSize);
-        return ResultUtil.success(fileService.searchOwnFiles(loginUser.getUserId(), keyword, page, pageSize));
+        return ResultUtil.success(fileService.searchOwnFiles(loginUser.getUserId(), keyword, page, pageSize, attr, order));
+    }
+
+    @RequiresUser
+    @ResponseBody
+    @DeleteMapping("/delete/{fileId}")
+    public RespJson delete(@PathVariable("fileId") String fileId) {
+        Subject subject = SecurityUtils.getSubject();
+        FsUser loginUser = (FsUser) subject.getSession().getAttribute(Constants.USER_SESSION);
+        log.info("user: " + loginUser.getUserName() + ", deleteFileId: " + fileId);
+        return null;
     }
 
     @GetMapping("/user")

@@ -1,5 +1,6 @@
 package com.tosim.fileshare.web.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.tosim.fileshare.common.config.exception.BusinessException;
@@ -32,6 +33,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -147,8 +149,10 @@ public class FileServiceImpl implements FileService {
         }
         if (fsUser.getPoints().intValue() < totalPoint)
             throw new BusinessException(ErrorCodes.DOWNLOAD_FILE_FAILED);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
         //压缩后的文件
-		String resourcesName = "packaged-"+fsUser.getUserId()+".zip";
+		String resourcesName = "packaged-"+sdf.format(Calendar.getInstance().getTime())+".zip";
 		String zipTmpFilePath = "D:/" + resourcesName;
 		ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipTmpFilePath));
 		for (int i = 0;i < n;i++) {
@@ -219,9 +223,9 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Map searchOwnFiles(String ownerUserId, String keyword, Integer page, Integer pageSize) {
+    public Map searchOwnFiles(String ownerUserId, String keyword, Integer page, Integer pageSize, String attr, Integer order) {
         PageHelper.startPage(page, pageSize);
-        List<FsFile> fsFiles = fsFileMapper.selectByFileNameAndUserId(ownerUserId, keyword);
+        List<FsFile> fsFiles = fsFileMapper.selectByFileNameAndUserId(ownerUserId, keyword, attr, order);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("keyword", keyword);
         map.put("page", page);

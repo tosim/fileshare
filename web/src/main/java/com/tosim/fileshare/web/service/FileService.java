@@ -13,7 +13,7 @@ public interface FileService {
     void upload(MultipartFile file, String fileName, String introduce, Integer point,String ownerUserId);
 
     ResponseEntity<byte[]> download(String[] fileId, FsUser fsUser) throws IOException;
-
+    
     Map searchFiles(String keyword, Integer page, Integer pageSize);
 
     Map<String, Object> getFileListByUserId(Integer page, Integer pageSize, String userId);
@@ -22,5 +22,5 @@ public interface FileService {
 
     List<String> getPreviewPngBase64(String fileId);
 
-    Map searchOwnFiles(String ownerUserId, String keyword, Integer page, Integer pageSize);
+    Map searchOwnFiles(String ownerUserId, String keyword, Integer page, Integer pageSize, String attr, Integer order);
 }
