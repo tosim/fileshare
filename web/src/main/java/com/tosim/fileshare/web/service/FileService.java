@@ -1,5 +1,6 @@
 package com.tosim.fileshare.web.service;
 
+import com.tosim.fileshare.common.domain.FsFile;
 import com.tosim.fileshare.common.domain.FsUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface FileService {
+
+    FsFile info(String fileId);
 
     void upload(MultipartFile file, String fileName, String introduce, Integer point, String ownerUserId);
 

@@ -52,6 +52,11 @@ public class FileServiceImpl implements FileService {
 //    private final
 
     @Override
+    public FsFile info(String fileId) {
+        return fsFileMapper.selectByFileId(fileId);
+    }
+
+    @Override
     public void upload(MultipartFile file, String fileName, String introduce, Integer point, String ownerUserId) {
         try {
             FsFile uploadedFile = new FsFile();

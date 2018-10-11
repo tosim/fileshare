@@ -47,6 +47,13 @@ public class FileController {
     }
 
     @ResponseBody
+    @GetMapping("/{fileId}")
+    public RespJson info(@PathVariable("fileId") String fileId) {
+        log.info("fileId: " + fileId);
+        return ResultUtil.success(fileService.info(fileId));
+    }
+
+    @ResponseBody
     @GetMapping(value = {"/search"})
     public RespJson search(String keyword,
                            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
