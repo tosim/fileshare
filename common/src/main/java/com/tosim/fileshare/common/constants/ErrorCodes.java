@@ -13,7 +13,11 @@ public enum ErrorCodes {
     REGISTER_FAILED("A3002","注册失败"),
 
     DOWNLOAD_FILE_FAILED("A4001","下载文件失败"),
-    UPLOAD_FILE_FAILED("A4002","上传文件失败");
+    UPLOAD_FILE_FAILED("A4002","上传文件失败"),
+
+    DELETE_FILE_FAILED("A5001", "删除文件失败"),
+
+    GET_FILE_INFO_FAILED("A6001", "获取文件信息失败");
 
 
     private final String code;

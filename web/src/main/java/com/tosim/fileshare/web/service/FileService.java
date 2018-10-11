@@ -10,10 +10,12 @@ import java.util.Map;
 
 public interface FileService {
 
-    void upload(MultipartFile file, String fileName, String introduce, Integer point,String ownerUserId);
+    void upload(MultipartFile file, String fileName, String introduce, Integer point, String ownerUserId);
 
     ResponseEntity<byte[]> download(String[] fileId, FsUser fsUser) throws IOException;
-    
+
+    boolean delete(String ownerUserId, String fileId);
+
     Map searchFiles(String keyword, Integer page, Integer pageSize);
 
     Map<String, Object> getFileListByUserId(Integer page, Integer pageSize, String userId);

@@ -175,6 +175,19 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public boolean delete(String ownerUserId, String fileId) {
+        FsFile fsFile = new FsFile();
+        fsFile.setOwner(ownerUserId);
+        fsFile.setFileId(fileId);
+        fsFile = fsFileMapper.selectOne(fsFile);
+        if (fsFile != null) {
+            fsFile.setDelFlag(true);
+            return fsFileMapper.updateByPrimaryKey(fsFile) == 1;
+        }
+        return false;
+    }
+
+    @Override
     public Map searchFiles(String keyword, Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
         List<FsFile> fsFiles = fsFileMapper.selectByFileName(keyword);

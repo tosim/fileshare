@@ -76,7 +76,10 @@ public class FileController {
         Subject subject = SecurityUtils.getSubject();
         FsUser loginUser = (FsUser) subject.getSession().getAttribute(Constants.USER_SESSION);
         log.info("user: " + loginUser.getUserName() + ", deleteFileId: " + fileId);
-        return null;
+        if (fileService.delete(loginUser.getUserId(), fileId)) {
+            return ResultUtil.success();
+        }
+        return ResultUtil.error(ErrorCodes.DELETE_FILE_FAILED);
     }
 
     @GetMapping("/user")
