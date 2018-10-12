@@ -28,4 +28,6 @@ public interface FileService {
     List<String> getPreviewPngBase64(String fileId);
 
     Map searchOwnFiles(String ownerUserId, String keyword, Integer page, Integer pageSize, String attr, Integer order);
+
+    Map getFileOwnerInfo(String fileId);
 }

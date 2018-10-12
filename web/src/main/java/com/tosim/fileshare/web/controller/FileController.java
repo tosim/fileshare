@@ -121,4 +121,11 @@ public class FileController {
         List<String> base64PngList = fileService.getPreviewPngBase64(fileId);
         return ResultUtil.success(base64PngList);
     }
+
+    @ResponseBody
+    @GetMapping("/{fileId}/userInfo")
+    public RespJson getFileOwnerInfo(@PathVariable("fileId")String fileId) {
+        Map<String, Object> ret = fileService.getFileOwnerInfo(fileId);
+        return ResultUtil.success(ret);
+    }
 }

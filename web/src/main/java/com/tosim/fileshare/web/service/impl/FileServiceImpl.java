@@ -255,4 +255,16 @@ public class FileServiceImpl implements FileService {
         map.put("list", fsFiles);
         return map;
     }
+
+    @Override
+    public Map getFileOwnerInfo(String fileId) {
+        FsFile fsFile = fsFileMapper.selectByFileId(fileId);
+        FsUser fsUser = fsUserMapper.selectByUserId(fsFile.getOwner());
+        FsUserFile fsUserFile = fsUserFileMapper.selectByUserIdAndFileId(fsUser.getUserId(), fsFile.getFileId());
+        Map<String, Object> ret = new HashMap<>();
+        fsUser.setPassword(null);
+        ret.put("owner", fsUser);
+        ret.put("isPayed", fsUserFile == null ? 0 : 1);
+        return ret;
+    }
 }
