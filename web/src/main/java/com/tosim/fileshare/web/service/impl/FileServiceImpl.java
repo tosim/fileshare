@@ -67,10 +67,11 @@ public class FileServiceImpl implements FileService {
             uploadedFile.setReduceFlag(DigestUtils.md5DigestAsHex(file.getBytes()));
             uploadedFile.setSuffix(SFileUtils.getSuffix(fileName));
             // 获取重复的文件
-            FsFile duplicateFile = fsFileMapper.selectOne(uploadedFile);
+            List duplicateFiles = fsFileMapper.select(uploadedFile);
 
+            FsFile duplicateFile;
             String storageUri;
-            if (duplicateFile == null) {    // 重复的文件不存在则上传
+            if (duplicateFiles.size() == 0) {    // 重复的文件不存在则上传
                 storageUri = FastDFSUtil.getInstance().upload(file.getBytes(), SFileUtils.getSuffix(file.getOriginalFilename()));
                 if (SFileUtils.isOffice(uploadedFile.getSuffix()) || "pdf".equals(uploadedFile.getSuffix())) {
                     log.info("office文件或pdf文件");
@@ -112,6 +113,7 @@ public class FileServiceImpl implements FileService {
                     }
                 }
             } else {    // 已存在的文件不需要重复上传，只需要拿到重复文件的文件路径和预览图片路径
+                duplicateFile = (FsFile) duplicateFiles.get(0);
                 storageUri = duplicateFile.getStorageUri();
                 uploadedFile.setPreviewUri(duplicateFile.getPreviewUri());
             }
@@ -257,14 +259,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Map getFileOwnerInfo(String fileId) {
+    public Map getFileOwnerInfo(String loginUserId, String fileId) {
         FsFile fsFile = fsFileMapper.selectByFileId(fileId);
-        FsUser fsUser = fsUserMapper.selectByUserId(fsFile.getOwner());
-        FsUserFile fsUserFile = fsUserFileMapper.selectByUserIdAndFileId(fsUser.getUserId(), fsFile.getFileId());
+        FsUser owner = fsUserMapper.selectByUserId(fsFile.getOwner());
+        FsUserFile fsUserFile = fsUserFileMapper.selectByUserIdAndFileId(loginUserId, fsFile.getFileId());
         Map<String, Object> ret = new HashMap<>();
-        fsUser.setPassword(null);
-        ret.put("owner", fsUser);
-        ret.put("isPayed", fsUserFile == null ? 0 : 1);
+        owner.setPassword(null);
+        ret.put("owner", owner);
+        ret.put("isPayed", (owner.getUserId().equals(loginUserId)) || (fsUserFile != null));
         return ret;
     }
 }

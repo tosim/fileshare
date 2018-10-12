@@ -29,5 +29,5 @@ public interface FileService {
 
     Map searchOwnFiles(String ownerUserId, String keyword, Integer page, Integer pageSize, String attr, Integer order);
 
-    Map getFileOwnerInfo(String fileId);
+    Map getFileOwnerInfo(String loginUserId, String fileId);
 }

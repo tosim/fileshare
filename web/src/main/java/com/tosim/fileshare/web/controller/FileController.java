@@ -125,7 +125,8 @@ public class FileController {
     @ResponseBody
     @GetMapping("/{fileId}/userInfo")
     public RespJson getFileOwnerInfo(@PathVariable("fileId")String fileId) {
-        Map<String, Object> ret = fileService.getFileOwnerInfo(fileId);
+        FsUser fsUser = sessionService.getSessionedUserBySession(SecurityUtils.getSubject().getSession());
+        Map<String, Object> ret = fileService.getFileOwnerInfo(fsUser.getUserId(), fileId);
         return ResultUtil.success(ret);
     }
 }
