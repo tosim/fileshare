@@ -29,7 +29,7 @@ public interface FsFileMapper extends MyMapper<FsFile> {
                                            @Param("attr") String attr, @Param("order") Integer order);
 
     @UpdateProvider(type = FsFileMapperProvider.class, method = "updateByFileIds")
-    int updateByFileIds(String userId, String[] fileIds);
+    int updateByFileIds(@Param("userId") String userId, @Param("fileIds") String[] fileIds);
 
     class FsFileMapperProvider {
         static Map<String, String> keyValue;
@@ -65,14 +65,14 @@ public interface FsFileMapper extends MyMapper<FsFile> {
                 if (i != 0) {
                     fileIdStr.append(",");
                 }
-                fileIdStr.append(fileIds[i]);
+                fileIdStr.append("'" + fileIds[i] + "'");
             }
             fileIdStr.append(")");
 
             return new SQL() {{
                 UPDATE("fs_file");
                 SET("del_flag=1");
-                WHERE("userId=#{userId} AND file_id IN " + fileIdStr.toString());
+                WHERE("owner=#{userId} AND file_id IN " + fileIdStr.toString());
             }}.toString();
         }
     }

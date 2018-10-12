@@ -53,11 +53,14 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FsFile info(String fileId) {
-        return fsFileMapper.selectByFileId(fileId);
+        FsFile fsFile = fsFileMapper.selectByFileId(fileId);
+        fsFile.setStorageUri(null);
+        return fsFile;
     }
 
+    @Transactional
     @Override
-    public void upload(MultipartFile file, String fileName, String introduce, Integer point, String ownerUserId) {
+    public void upload(MultipartFile file, String fileName, String introduce, Integer point, FsUser ownerUser) {
         try {
             FsFile uploadedFile = new FsFile();
             // 文件生成md5
@@ -72,7 +75,7 @@ public class FileServiceImpl implements FileService {
                 if (SFileUtils.isOffice(uploadedFile.getSuffix()) || "pdf".equals(uploadedFile.getSuffix())) {
                     log.info("office文件或pdf文件");
                     String dirUrl = "E:\\Workspace\\tmp\\";
-                    String fileUrl = dirUrl + ownerUserId + "-" + file.getOriginalFilename().split("\\.")[0];
+                    String fileUrl = dirUrl + ownerUser.getUserName() + "-" + file.getOriginalFilename().split("\\.")[0];
                     log.info("源文件路径（不包括后缀）: {}", fileUrl);
                     File tmpOldFile = new File(fileUrl + "." + uploadedFile.getSuffix());
                     file.transferTo(tmpOldFile);
@@ -117,7 +120,7 @@ public class FileServiceImpl implements FileService {
             uploadedFile.setCreateTime(Calendar.getInstance().getTime());
             uploadedFile.setFileId(UUID.randomUUID().toString().replaceAll("-", ""));
             uploadedFile.setFileName(fileName);
-            uploadedFile.setOwner(ownerUserId);
+            uploadedFile.setOwner(ownerUser.getUserId());
             uploadedFile.setIntroduce(introduce);
             uploadedFile.setPoint(point);
             uploadedFile.setPrivateFlag(false);
@@ -126,6 +129,9 @@ public class FileServiceImpl implements FileService {
             uploadedFile.setUpdateTime(uploadedFile.getCreateTime());
 
             fsFileMapper.insertSelective(uploadedFile);
+
+            ownerUser.setPoints(ownerUser.getPoints() + 10);
+            fsUserMapper.updateByPrimaryKeySelective(ownerUser);
 
         } catch (IOException e) {
             throw new BusinessException(ErrorCodes.UPLOAD_FILE_FAILED);

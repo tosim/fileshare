@@ -20,4 +20,9 @@ public class FileServiceImplTest {
     public void searchFiles() {
 //        fileService.searchFiles("好", 1, 5);
     }
+
+    @Test
+    public void delete() {
+        fileService.delete("10484e42bfaa48f38cfe0fec3eea6700", new String[]{"fd0025e050ba447bbd31fe01c31c1176"});
+    }
 }

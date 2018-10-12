@@ -13,7 +13,7 @@ public interface FileService {
 
     FsFile info(String fileId);
 
-    void upload(MultipartFile file, String fileName, String introduce, Integer point, String ownerUserId);
+    void upload(MultipartFile file, String fileName, String introduce, Integer point, FsUser ownerUser);
 
     ResponseEntity<byte[]> download(String[] fileId, FsUser fsUser) throws IOException;
 

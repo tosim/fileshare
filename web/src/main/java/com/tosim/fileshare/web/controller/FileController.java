@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,9 +43,9 @@ public class FileController {
             log.info("文件为空");
             return ResultUtil.error(ErrorCodes.UPLOAD_FILE_FAILED);
         }
-        Subject subject = SecurityUtils.getSubject();
-        FsUser loginUser = (FsUser) subject.getSession().getAttribute(Constants.USER_SESSION);
-        fileService.upload(file, fileName, introduce, point, loginUser.getUserId());
+        FsUser loginUser = sessionService.getSessionedUserBySession(SecurityUtils.getSubject().getSession());
+        fileService.upload(file, fileName, introduce, point, loginUser);
+        sessionService.removeSessionedUserBySession(SecurityUtils.getSubject().getSession());
         return ResultUtil.success();
     }
 
@@ -74,8 +75,7 @@ public class FileController {
                               @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
                               String attr,
                               Integer order) {  // 1:升序 0:降序
-        Subject subject = SecurityUtils.getSubject();
-        FsUser loginUser = (FsUser) subject.getSession().getAttribute(Constants.USER_SESSION);
+        FsUser loginUser = sessionService.getSessionedUserBySession(SecurityUtils.getSubject().getSession());
         log.info("user: " + loginUser.getUserName() + ", fileName: " + keyword + ", page: " + page + ", pageSize: " + pageSize);
         return ResultUtil.success(fileService.searchOwnFiles(loginUser.getUserId(), keyword, page, pageSize, attr, order));
     }
@@ -84,8 +84,7 @@ public class FileController {
     @ResponseBody
     @DeleteMapping("/delete")
     public RespJson delete(String[] fileIds) {
-        Subject subject = SecurityUtils.getSubject();
-        FsUser loginUser = (FsUser) subject.getSession().getAttribute(Constants.USER_SESSION);
+        FsUser loginUser = sessionService.getSessionedUserBySession(SecurityUtils.getSubject().getSession());
         log.info("user: " + loginUser.getUserName() + ", deleteFileId: " + Arrays.toString(fileIds));
         if (fileService.delete(loginUser.getUserId(), fileIds)) {
             return ResultUtil.success();
