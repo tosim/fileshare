@@ -179,17 +179,14 @@ public class FileServiceImpl implements FileService {
 		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers,HttpStatus.CREATED);
     }
 
+    @Transactional
     @Override
-    public boolean delete(String ownerUserId, String fileId) {
-        FsFile fsFile = new FsFile();
-        fsFile.setOwner(ownerUserId);
-        fsFile.setFileId(fileId);
-        fsFile = fsFileMapper.selectOne(fsFile);
-        if (fsFile != null) {
-            fsFile.setDelFlag(true);
-            return fsFileMapper.updateByPrimaryKey(fsFile) == 1;
+    public boolean delete(String ownerUserId, String[] fileIds) {
+        int len = fsFileMapper.updateByFileIds(ownerUserId, fileIds);
+        if (len != fileIds.length) {
+            throw new RuntimeException("更新行数与数组行数不一致，更新失败");
         }
-        return false;
+        return true;
     }
 
     @Override

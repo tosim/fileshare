@@ -1,5 +1,6 @@
 package com.tosim.fileshare.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.tosim.fileshare.common.config.web.RespJson;
 import com.tosim.fileshare.common.config.web.ResultUtil;
 import com.tosim.fileshare.common.constants.Constants;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -78,12 +80,12 @@ public class FileController {
 
     @RequiresUser
     @ResponseBody
-    @DeleteMapping("/delete/{fileId}")
-    public RespJson delete(@PathVariable("fileId") String fileId) {
+    @DeleteMapping("/delete")
+    public RespJson delete(String[] fileIds) {
         Subject subject = SecurityUtils.getSubject();
         FsUser loginUser = (FsUser) subject.getSession().getAttribute(Constants.USER_SESSION);
-        log.info("user: " + loginUser.getUserName() + ", deleteFileId: " + fileId);
-        if (fileService.delete(loginUser.getUserId(), fileId)) {
+        log.info("user: " + loginUser.getUserName() + ", deleteFileId: " + Arrays.toString(fileIds));
+        if (fileService.delete(loginUser.getUserId(), fileIds)) {
             return ResultUtil.success();
         }
         return ResultUtil.error(ErrorCodes.DELETE_FILE_FAILED);

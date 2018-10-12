@@ -17,7 +17,7 @@ public interface FileService {
 
     ResponseEntity<byte[]> download(String[] fileId, FsUser fsUser) throws IOException;
 
-    boolean delete(String ownerUserId, String fileId);
+    boolean delete(String ownerUserId, String[] fileIds);
 
     Map searchFiles(String keyword, Integer page, Integer pageSize);
 

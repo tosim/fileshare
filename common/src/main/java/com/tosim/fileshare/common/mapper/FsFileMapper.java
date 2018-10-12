@@ -5,6 +5,7 @@ import com.tosim.fileshare.common.domain.FsFile;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.HashMap;
@@ -25,6 +26,9 @@ public interface FsFileMapper extends MyMapper<FsFile> {
     @SelectProvider(type = FsFileMapperProvider.class, method = "selectByFileNameAndUserId")
     List<FsFile> selectByFileNameAndUserId(@Param("userId") String userId, @Param("fileName") String fileName,
                                            @Param("attr") String attr, @Param("order") Integer order);
+
+    @UpdateProvider(type = FsFileMapperProvider.class, method = "updateByFileIds")
+    int updateByFileIds(String userId, String[] fileIds);
 
     class FsFileMapperProvider {
         static Map<String, String> keyValue;
@@ -51,6 +55,23 @@ public interface FsFileMapper extends MyMapper<FsFile> {
                         ORDER_BY(attr + " ASC");
                     }
                 }
+            }}.toString();
+        }
+
+        public String updateByFileIds(@Param("userId") String userId, @Param("fileIds") String[] fileIds) {
+            StringBuilder fileIdStr = new StringBuilder("(");
+            for (int i = 0; i < fileIds.length; i++) {
+                if (i != 0) {
+                    fileIdStr.append(",");
+                }
+                fileIdStr.append(fileIds[i]);
+            }
+            fileIdStr.append(")");
+
+            return new SQL(){{
+                UPDATE("fs_file");
+                SET("del_flag=1");
+                WHERE("userId=#{userId} AND file_id IN " + fileIdStr.toString());
             }}.toString();
         }
     }
