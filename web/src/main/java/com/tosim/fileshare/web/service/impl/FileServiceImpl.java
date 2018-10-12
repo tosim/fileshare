@@ -193,9 +193,9 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Map searchFiles(String keyword, Integer page, Integer pageSize) {
+    public Map searchFiles(String keyword, Integer page, Integer pageSize, String attr, Integer order) {
         PageHelper.startPage(page, pageSize);
-        List<FsFile> fsFiles = fsFileMapper.selectByFileName(keyword);
+        List<FsFile> fsFiles = fsFileMapper.selectByFileName(keyword, attr, order);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("keyword", keyword);
         map.put("page", page);

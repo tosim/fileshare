@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/fileshare?useSSL=false&encoding=utf8
     username: root
-    password: "123456"
+    password: "056210"
     #外网数据库ip
     ###################以下为druid增加的配置###########################
     type: com.alibaba.druid.pool.DruidDataSource

@@ -19,7 +19,7 @@ public interface FileService {
 
     boolean delete(String ownerUserId, String fileId);
 
-    Map searchFiles(String keyword, Integer page, Integer pageSize);
+    Map searchFiles(String keyword, Integer page, Integer pageSize, String attr, Integer order);
 
     Map<String, Object> getFileListByUserId(Integer page, Integer pageSize, String userId);
 

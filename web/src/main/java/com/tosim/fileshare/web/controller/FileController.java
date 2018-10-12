@@ -57,9 +57,11 @@ public class FileController {
     @GetMapping(value = {"/search"})
     public RespJson search(String keyword,
                            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                           @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
-        log.info("fileName: " + keyword + ", page: " + page + ", pageSize: " + pageSize);
-        return ResultUtil.success(fileService.searchFiles(keyword, page, pageSize));
+                           @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
+                           String attr,
+                           Integer order) {
+        log.info("fileName: " + keyword + ", page: " + page + ", pageSize: " + pageSize + ", attr: " + attr + ", order: " + order);
+        return ResultUtil.success(fileService.searchFiles(keyword, page, pageSize, attr, order));
     }
 
     @RequiresUser

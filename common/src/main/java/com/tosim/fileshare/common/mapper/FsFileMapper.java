@@ -16,8 +16,10 @@ public interface FsFileMapper extends MyMapper<FsFile> {
     @Select("select * from fs_file where file_id=#{fileId} AND del_flag=0")
     FsFile selectByFileId(String fileId);
 
-    @Select("SELECT * from fs_file where file_name like CONCAT('%', #{fileName}, '%') AND del_flag=0")
-    List<FsFile> selectByFileName(String fileName);
+//    @Select("SELECT * from fs_file where file_name like CONCAT('%', #{fileName}, '%') AND del_flag=0")
+    @SelectProvider(type = FsFileMapperProvider.class, method = "selectByFileName")
+    List<FsFile> selectByFileName(@Param("fileName") String fileName,
+                                           @Param("attr") String attr, @Param("order") Integer order);
 
     @Select("select * from fs_file where owner=#{userId} AND del_flag=0")
     List<FsFile> selectByUserId(String userId);
@@ -42,6 +44,24 @@ public interface FsFileMapper extends MyMapper<FsFile> {
                 SELECT("*");
                 FROM("fs_file");
                 WHERE("owner=#{userId} AND file_name like CONCAT('%', #{fileName}, '%') AND del_flag=0");
+                if (!keyValue.containsKey(attr)) {
+                    ORDER_BY("update_time DESC");
+                } else {
+                    if (order == 0) {
+                        ORDER_BY(attr + " DESC");
+                    } else {
+                        ORDER_BY(attr + " ASC");
+                    }
+                }
+            }}.toString();
+        }
+
+        public String selectByFileName(@Param("fileName") String fileName,
+                                                @Param("attr") String attr, @Param("order") Integer order) {
+            return new SQL() {{
+                SELECT("*");
+                FROM("fs_file");
+                WHERE("file_name like CONCAT('%', #{fileName}, '%') AND del_flag=0");
                 if (!keyValue.containsKey(attr)) {
                     ORDER_BY("update_time DESC");
                 } else {
